@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho de Compras</title>
-    
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -14,10 +14,12 @@
         <div>
             <p>Nome: </p>
             <input type="text" id="nomeProduto">
+            <span id="erroNome" class="error hide">Preencha o nome</span>
         </div>
         <div>
             <p>Preço: </p>
             <input type="number" id="precoProduto" step="0.01" min="0">
+            <span id="erroPreco" class="error hide">Preço inválido</span>
         </div>
 
         <br>
@@ -31,7 +33,7 @@
         <div class="cardProduto">
                 <h2> Produtos Disponíveis</h2>
                 <div id="listaProdutos" class="lista-produtos">
-                    <p class="empty-message">Nenhum produto cadastrado ainda.</p>
+                <p class="empty-message">Nenhum produto cadastrado ainda.</p>
         </div>
 
     </form>
