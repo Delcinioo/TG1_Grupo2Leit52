@@ -1,44 +1,41 @@
-<Doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrinho de Compras</title>
-    <link rel="stylesheet" href="./css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho de Compras</title>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-    <form id="formCarrinho">
 
-        <h1>Carrinho de Compras</h1>
-        <div>
-            <p>Nome: </p>
-            <input type="text" id="nomeProduto">
-            <span id="erroNome" class="error hide">Preencha o nome</span>
-        </div>
-        <div>
-            <p>Preço: </p>
-            <input type="number" id="precoProduto" step="0.01" min="0">
-            <span id="erroPreco" class="error hide">Preço inválido</span>
-        </div>
+  <h1>Carrinho de Compras</h1>
 
-        <br>
+  <form id="formProduto">
+    <div>
+      <label>Nome:</label>
+      <input type="text" id="nomeProduto" placeholder="Ex: Arroz">
+      <span id="erroNome" class="error hide"></span>
+    </div>
+    <div>
+      <label>Preço (MZN):</label>
+      <input type="number" id="precoProduto" step="0.01" min="0" placeholder="Ex: 150.00">
+      <span id="erroPreco" class="error hide"></span>
+    </div>
+    <div>
+      <label>Quantidade:</label>
+      <input type="number" id="quantidadeProduto" min="1" value="1">
+      <span id="erroQuantidade" class="error hide"></span>
+    </div>
+    <button type="submit">Adicionar Produto</button>
+  </form>
 
-        <div>
-            <input type="submit" id="btnAdicionar" value="Adicionar">
-        </div>
+  <hr>
 
-        <br>
+  <h2>Produtos Disponíveis</h2>
+  <div id="listaProdutos">
+    <p class="empty-message">Nenhum produto cadastrado ainda.</p>
+  </div>
 
-        <div class="cardProduto">
-                <h2> Produtos Disponíveis</h2>
-                <div id="listaProdutos" class="lista-produtos">
-                <p class="empty-message">Nenhum produto cadastrado ainda.</p>
-        </div>
-
-    </form>
-    
-    <script type="module" src="./js/controller.js"></script>
-
+  <script type="module" src="./js/controller.js"></script>
 </body>
 </html>

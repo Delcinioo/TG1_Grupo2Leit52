@@ -2,124 +2,109 @@ import { LojaModel } from './model.js';
 import { LojaView } from './view.js';
 
 class LojaController {
+  constructor(model, view) {
+    this.model = model;
+    this.view = view;
+  }
 
-    constructor(model, view) { 
-        this.model = model;
-        this.view = view;
-    }
+  init() {
+    const form = document.getElementById("formProduto");
+    const campoNome = document.getElementById("nomeProduto");
+    const campoPreco = document.getElementById("precoProduto");
+    const campoQtd = document.getElementById("quantidadeProduto");
 
-    init() {
-        const form = document.getElementById("formCarrinho");
-        const camponome = document.getElementById("nomeProduto");
-        const campopreco = document.getElementById("precoProduto");
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
+      this.view.limparTodosErros();
 
-            const nome = camponome.value;
-            const precoRaw = campopreco.value;
+      const nome = campoNome.value;
+      const precoRaw = campoPreco.value;
+      const qtdRaw = campoQtd.value;
+      let valido = true;
 
-            let valido = true;
+      // Validar nome
+      const resNome = this.validarNome(nome);
+      if (!resNome.valido) {
+        this.view.mostrarErro(campoNome, "erroNome", resNome.msg);
+        valido = false;
+      }
 
-            // limpar erros antes de validar
-            this.view.limparTodosErros();
+      // Validar preço
+      const resPreco = this.validarPreco(precoRaw);
+      if (!resPreco.valido) {
+        this.view.mostrarErro(campoPreco, "erroPreco", resPreco.msg);
+        valido = false;
+      }
 
-            // VALIDAR NOME
+      // Validar quantidade
+      const resQtd = this.validarQuantidade(qtdRaw);
+      if (!resQtd.valido) {
+        this.view.mostrarErro(campoQtd, "erroQuantidade", resQtd.msg);
+        valido = false;
+      }
 
-            const resultadoNome = this.validarNomeProduto(nome);
+      if (!valido) return;
 
-            if (!resultadoNome.valido) {
-                this.view.mostrarErro(camponome, "erroNome");
-                document.getElementById("erroNome").innerText = resultadoNome.msg;
-                valido = false;
-            } else {
-                this.view.limparErro(camponome, "erroNome");
-            }
+      this.model.adicionarProduto(nome.trim(), resPreco.valor, resQtd.valor);
+      this.view.renderizarProdutos(this.model.listarProdutos());
 
-            // VALIDAR PREÇO
+      // Limpar campos
+      campoNome.value = "";
+      campoPreco.value = "";
+      campoQtd.value = "1";
+      campoNome.focus();
+    });
+  }
 
-            const resultadoPreco = this.validarPreco(precoRaw);
+  validarNome(nome) {
+    nome = nome.trim();
+    const regex = /^[a-zA-ZÀ-ÿ0-9\s\-&]+$/;
 
-            if (!resultadoPreco.valido) {
-                this.view.mostrarErro(campopreco, "erroPreco");
-                document.getElementById("erroPreco").innerText = resultadoPreco.msg;
-                valido = false;
-            } else {
-                this.view.limparErro(campopreco, "erroPreco");
-            }
+    if (!nome)
+      return { valido: false, msg: "Preencha o nome" };
+    if (nome.length < 3)
+      return { valido: false, msg: "Mínimo 3 caracteres" };
+    if (!regex.test(nome))
+      return { valido: false, msg: "Caracteres inválidos" };
+    if (/^\d+$/.test(nome))
+      return { valido: false, msg: "Nome não pode ser só números" };
 
-            // SE TUDO FOR VÁLIDO
+    return { valido: true };
+  }
 
-            if (valido) {
-                this.model.adicionarProduto(nome.trim(), resultadoPreco.valor);
+  validarPreco(precoBruto) {
+    if (!precoBruto || precoBruto === "")
+      return { valido: false, msg: "Preencha o preço" };
 
-                this.view.renderizarProdutos(this.model.listarProdutos());
+    const preco = parseFloat(precoBruto);
 
-                camponome.value = "";
-                campopreco.value = "";
-            }
-        });
-    }
+    if (isNaN(preco))
+      return { valido: false, msg: "Preço inválido" };
+    if (preco <= 0)
+      return { valido: false, msg: "Preço deve ser maior que 0" };
+    if (preco > 1000000)
+      return { valido: false, msg: "Preço demasiado alto" };
 
-    // VALIDAR NOME
+    return { valido: true, valor: preco };
+  }
 
-    validarNomeProduto(nome) {
-        nome = nome.trim();
+  validarQuantidade(qtdBruto) {
+    if (!qtdBruto || qtdBruto === "")
+      return { valido: false, msg: "Preencha a quantidade" };
 
-        const regex = /^[a-zA-ZÀ-ÿ0-9\s\-&]+$/;
+    const qtd = parseInt(qtdBruto);
 
-        if (!nome) {
-            return { valido: false, msg: "Preencha o nome" };
-        }
+    if (isNaN(qtd) || qtd < 1)
+      return { valido: false, msg: "Quantidade mínima é 1" };
+    if (qtd > 9999)
+      return { valido: false, msg: "Quantidade demasiado alta" };
 
-        if (nome.length < 3) {
-            return { valido: false, msg: "Nome muito curto (mín. 3 caracteres)" };
-        }
-
-        if (!regex.test(nome)) {
-            return { valido: false, msg: "Nome contém caracteres inválidos" };
-        }
-
-        if (/^\d+$/.test(nome)) {
-            return { valido: false, msg: "O nome não pode ser só números" };
-        }
-
-        return { valido: true };
-    }
-
-    // VALIDAR PREÇO
-    
-    validarPreco(precoBruto) {
-        
-        precoBruto = precoBruto.trim();
-
-        if (!precoBruto) {
-            return { valido: false, msg: "Preencha o preço" };
-        }
-
-        const preco = parseFloat(precoBruto);
-
-        if (isNaN(preco)) {
-            return { valido: false, msg: "Preço inválido" };
-        }
-
-        if (preco <= 0) {
-            return { valido: false, msg: "Preço deve ser maior que 0" };
-        }
-
-        if (preco > 1000000) {
-            return { valido: false, msg: "Preço demasiado alto" };
-        }
-
-        return { valido: true, valor: preco };
-    }
+    return { valido: true, valor: qtd };
+  }
 }
 
-// =========================
-// INICIALIZAÇÃO
-// =========================
 const model = new LojaModel();
 const view = new LojaView();
 const controller = new LojaController(model, view);
-
 controller.init();

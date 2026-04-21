@@ -1,23 +1,25 @@
 export class LojaModel {
-    constructor() {
-        this.produtos = [];
+  constructor() {
+    this.produtos = [];
+  }
+
+  adicionarProduto(nome, preco, quantidade) {
+    const index = this.produtos.findIndex(
+      p => p.nome.toLowerCase() === nome.toLowerCase()
+    );
+
+    if (index !== -1) {
+      // Produto já existe — incrementa quantidade
+      this.produtos[index].quantidade += quantidade;
+      return { novo: false, produto: this.produtos[index] };
     }
 
-    adicionarProduto(nome, preco) {
-        const produto = {
-            //id: Date.now(), // identificador simples
-            nome: nome,
-            preco: parseFloat(preco)
-        };
+    const produto = { nome, preco, quantidade };
+    this.produtos.push(produto);
+    return { novo: true, produto };
+  }
 
-        this.produtos.push(produto);
-        return produto;
-    }
-
-    listarProdutos() {
-        return this.produtos;
-    }
+  listarProdutos() {
+    return this.produtos;
+  }
 }
-
-// exportar instância
-export const lojaModel = new LojaModel();
