@@ -9,6 +9,7 @@ class LojaController {
 
   init() {
     const form = document.getElementById("formProduto");
+    const btnEncerrar = document.getElementById("btnEncerrar");
     const campoNome = document.getElementById("nomeProduto");
     const campoPreco = document.getElementById("precoProduto");
     const campoQtd = document.getElementById("quantidadeProduto");
@@ -48,6 +49,14 @@ class LojaController {
 
       this.model.adicionarProduto(nome.trim(), resPreco.valor, resQtd.valor);
       this.view.renderizarProdutos(this.model.listarProdutos());
+      this.actualizarInterface();
+
+      btnEncerrar.addEventListener('click', () => {
+        if (confirm("Deseja realmente encerrar a compra?")) {
+          this.model.reiniciarCarrinho();
+          this.actualizarInterface();
+        }
+      });
 
       // Limpar campos
       campoNome.value = "";
@@ -101,6 +110,15 @@ class LojaController {
       return { valido: false, msg: "Quantidade demasiado alta" };
 
     return { valido: true, valor: qtd };
+  }
+
+  actualizarInterface() {
+    const produtos = this.model.listarProdutos();
+    this.view.renderizarProdutos(produtos);
+    this.view.renderizarTotais(
+      this.model.calcularQuantidadeTotal(),
+      this.model.calcularPrecoTotal()
+    );
   }
 }
 

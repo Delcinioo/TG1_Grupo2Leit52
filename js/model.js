@@ -22,4 +22,16 @@ export class LojaModel {
   listarProdutos() {
     return this.produtos;
   }
+
+  calcularQuantidadeTotal() {
+    return this.produtos.reduce((soma, p) => soma + p.quantidade, 0);
+  }
+
+  calcularPrecoTotal() {
+    return this.produtos.reduce((soma, p) => soma + (p.preco * p.quantidade), 0);
+  }
+
+  reiniciarCarrinho() {
+    this.produtos = [];
+  }
 }

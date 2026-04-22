@@ -37,4 +37,15 @@ export class LojaView {
       lista.appendChild(card);
     });
   }
+
+  renderizarTotais(quantidade, preco) {
+    const resumo = document.getElementById("resumoCarrinho");
+    if (quantidade > 0) {
+      resumo.classList.remove("hide");
+      document.getElementById("totalItens").innerText = quantidade;
+      document.getElementById("valorTotal").innerText = preco.toFixed(2);
+    } else {
+      resumo.classList.add("hide");
+    }
+  }
 }

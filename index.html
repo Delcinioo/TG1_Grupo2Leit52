@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrinho de Compras</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
 
   <h1>Carrinho de Compras</h1>
@@ -35,7 +37,16 @@
   <div id="listaProdutos">
     <p class="empty-message">Nenhum produto cadastrado ainda.</p>
   </div>
+  <hr>
+  <div id="resumoCarrinho" class="hide">
+    <p><strong>Total de itens:</strong> <span id="totalItens">0</span></p>
+    <p><strong>Valor Total:</strong> <span id="valorTotal">0.00</span> MZN</p>
+    <button id="btnEncerrar" style="background-color: #d9534f; color: white; margin-top: 15px;">
+      Encerrar compra
+    </button>
+  </div>
 
   <script type="module" src="./js/controller.js"></script>
 </body>
+
 </html>
