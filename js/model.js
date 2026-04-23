@@ -4,12 +4,30 @@ export class LojaModel {
     this.carrinho = [];
   }
 
-  adicionarAoCarrinho(nome, preco, quantidade) {
-    const index = this.carrinho.findIndex(p => p.nome.toLowerCase() === nome.toLowerCase());
+  adicionarAoCarrinho(nome, preco, quantidadeDesejada) {
+    const produtoLoja = this.produtos.find(p => p.nome === nome);
+
+    if (produtoLoja && produtoLoja.quantidade >= quantidadeDesejada) {
+      produtoLoja.quantidade -= quantidadeDesejada; // Diminui o stock disponível
+
+      const indexCarrinho = this.carrinho.findIndex(p => p.nome === nome);
+      if (indexCarrinho !== -1) {
+        this.carrinho[indexCarrinho].quantidade += quantidadeDesejada;
+      } else {
+        this.carrinho.push({ nome, preco, quantidade: quantidadeDesejada });
+      }
+      return true;
+    }
+    return false;
+  }
+
+  removerDoCarrinho(nome) {
+    const index = this.carrinho.findIndex(p => p.nome === nome);
     if (index !== -1) {
-      this.carrinho[index].quantidade += quantidade;
-    } else {
-      this.carrinho.push({ nome, preco, quantidade });
+      const item = this.carrinho[index];
+      const produtoLoja = this.produtos.find(p => p.nome === nome);
+      if (produtoLoja) produtoLoja.quantidade += item.quantidade;
+      this.carrinho.splice(index, 1);
     }
   }
 
@@ -33,19 +51,13 @@ export class LojaModel {
     return this.produtos;
   }
 
-  calcularQuantidadeTotal() {
-    return this.carrinho.reduce((soma, p) => soma + p.quantidade, 0);
-  }
-
-  calcularPrecoTotal() {
-    return this.carrinho.reduce((soma, p) => soma + (p.preco * p.quantidade), 0);
-  }
+  listarCarrinho() { return this.carrinho; }
+  calcularQuantidadeTotal() { return this.carrinho.reduce((soma, p) => soma + p.quantidade, 0); }
+  calcularPrecoTotal() { return this.carrinho.reduce((soma, p) => soma + (p.preco * p.quantidade), 0); }
 
   reiniciarCarrinho() {
     this.carrinho = [];
-  }
-
-  listarCarrinho() {
-    return this.carrinho;
+    // Remove definitivamente da loja apenas os que chegaram a zero
+    this.produtos = this.produtos.filter(p => p.quantidade > 0);
   }
 }

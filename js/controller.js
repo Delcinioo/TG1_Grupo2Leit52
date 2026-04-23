@@ -58,15 +58,27 @@ class LojaController {
       campoNome.focus();
     });
 
-    document.getElementById("listaProdutos").addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
       if (e.target.classList.contains('btn-carrinho')) {
         const nome = e.target.getAttribute('data-nome');
+        const index = e.target.getAttribute('data-index');
+        const qtdInput = document.getElementById(`qtd-${index}`);
+        const quantidadeDesejada = parseInt(qtdInput.value);
+
+        // Busca o preço original no modelo
         const produtoOriginal = this.model.listarProdutos().find(p => p.nome === nome);
 
         if (produtoOriginal) {
-          this.model.adicionarAoCarrinho(nome, produtoOriginal.preco, 1);
+          const sucesso = this.model.adicionarAoCarrinho(nome, produtoOriginal.preco, quantidadeDesejada);
+          if (!sucesso) alert("Quantidade indisponível no stock!");
           this.actualizarInterface();
         }
+      }
+
+      if (e.target.classList.contains('btn-remover')) {
+        const nome = e.target.getAttribute('data-nome');
+        this.model.removerDoCarrinho(nome);
+        this.actualizarInterface();
       }
     });
 

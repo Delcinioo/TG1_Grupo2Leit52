@@ -26,14 +26,19 @@ export class LojaView {
       return;
     }
 
-    produtos.forEach(produto => {
+    produtos.forEach((produto, index) => {
       const card = document.createElement("div");
       card.classList.add("card-produto");
+      const esgotado = produto.quantidade <= 0;
+
       card.innerHTML = `
         <span class="nome-produto">${produto.nome}</span>
         <span class="preco-produto">${produto.preco.toFixed(2)} MZN</span>
         <span class="quantidade-badge">x${produto.quantidade}</span>
-        <button class="btn-carrinho" data-nome="${produto.nome}">Comprar</button>
+        <div style="display:flex; gap:5px;">
+          <input type="number" id="qtd-${index}" value="1" min="1" max="${produto.quantidade}" style="width:45px" ${esgotado ? 'disabled' : ''}>
+          <button class="btn-carrinho" data-nome="${produto.nome}" data-index="${index}" ${esgotado ? 'disabled style="background:#ccc"' : ''}>Comprar</button>
+        </div>
       `;
       lista.appendChild(card);
     });
@@ -54,6 +59,7 @@ export class LojaView {
         <span class="nome-produto">${item.nome}</span>
         <span class="quantidade-badge">x${item.quantidade}</span>
         <span class="preco-produto">${(item.preco * item.quantidade).toFixed(2)} MZN</span>
+        <button class="btn-remover" data-nome="${item.nome}" style="background:#e74c3c; color:white; border:none; border-radius:4px; padding:4px 8px; cursor:pointer;">Apagar</button>
       `;
       container.appendChild(div);
     });
