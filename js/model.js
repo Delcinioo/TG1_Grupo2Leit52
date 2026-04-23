@@ -1,6 +1,16 @@
 export class LojaModel {
   constructor() {
     this.produtos = [];
+    this.carrinho = [];
+  }
+
+  adicionarAoCarrinho(nome, preco, quantidade) {
+    const index = this.carrinho.findIndex(p => p.nome.toLowerCase() === nome.toLowerCase());
+    if (index !== -1) {
+      this.carrinho[index].quantidade += quantidade;
+    } else {
+      this.carrinho.push({ nome, preco, quantidade });
+    }
   }
 
   adicionarProduto(nome, preco, quantidade) {
@@ -24,14 +34,18 @@ export class LojaModel {
   }
 
   calcularQuantidadeTotal() {
-    return this.produtos.reduce((soma, p) => soma + p.quantidade, 0);
+    return this.carrinho.reduce((soma, p) => soma + p.quantidade, 0);
   }
 
   calcularPrecoTotal() {
-    return this.produtos.reduce((soma, p) => soma + (p.preco * p.quantidade), 0);
+    return this.carrinho.reduce((soma, p) => soma + (p.preco * p.quantidade), 0);
   }
 
   reiniciarCarrinho() {
-    this.produtos = [];
+    this.carrinho = [];
+  }
+
+  listarCarrinho() {
+    return this.carrinho;
   }
 }

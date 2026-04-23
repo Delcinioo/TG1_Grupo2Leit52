@@ -33,8 +33,29 @@ export class LojaView {
         <span class="nome-produto">${produto.nome}</span>
         <span class="preco-produto">${produto.preco.toFixed(2)} MZN</span>
         <span class="quantidade-badge">x${produto.quantidade}</span>
+        <button class="btn-carrinho" data-nome="${produto.nome}">Comprar</button>
       `;
       lista.appendChild(card);
+    });
+  }
+
+  renderizarCarrinho(itens) {
+    const container = document.getElementById("itensCarrinho");
+    container.innerHTML = "";
+    if (itens.length === 0) {
+      container.innerHTML = '<p class="empty-message">O carrinho está vazio.</p>';
+      return;
+    }
+
+    itens.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("card-produto");
+      div.innerHTML = `
+        <span class="nome-produto">${item.nome}</span>
+        <span class="quantidade-badge">x${item.quantidade}</span>
+        <span class="preco-produto">${(item.preco * item.quantidade).toFixed(2)} MZN</span>
+      `;
+      container.appendChild(div);
     });
   }
 

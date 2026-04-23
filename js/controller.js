@@ -51,18 +51,30 @@ class LojaController {
       this.view.renderizarProdutos(this.model.listarProdutos());
       this.actualizarInterface();
 
-      btnEncerrar.addEventListener('click', () => {
-        if (confirm("Deseja realmente encerrar a compra?")) {
-          this.model.reiniciarCarrinho();
-          this.actualizarInterface();
-        }
-      });
-
       // Limpar campos
       campoNome.value = "";
       campoPreco.value = "";
       campoQtd.value = "1";
       campoNome.focus();
+    });
+
+    document.getElementById("listaProdutos").addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-carrinho')) {
+        const nome = e.target.getAttribute('data-nome');
+        const produtoOriginal = this.model.listarProdutos().find(p => p.nome === nome);
+
+        if (produtoOriginal) {
+          this.model.adicionarAoCarrinho(nome, produtoOriginal.preco, 1);
+          this.actualizarInterface();
+        }
+      }
+    });
+
+    document.getElementById("btnEncerrar").addEventListener('click', () => {
+      if (confirm("Deseja realmente encerrar a compra?")) {
+        this.model.reiniciarCarrinho();
+        this.actualizarInterface();
+      }
     });
   }
 
@@ -113,8 +125,12 @@ class LojaController {
   }
 
   actualizarInterface() {
-    const produtos = this.model.listarProdutos();
-    this.view.renderizarProdutos(produtos);
+    const itensCarrinho = this.model.listarCarrinho();
+
+    this.view.renderizarProdutos(this.model.listarProdutos());
+
+    this.view.renderizarCarrinho(itensCarrinho);
+
     this.view.renderizarTotais(
       this.model.calcularQuantidadeTotal(),
       this.model.calcularPrecoTotal()
