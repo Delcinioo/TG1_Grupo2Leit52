@@ -1,57 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt">
-
+ 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrinho de Compras</title>
   <link rel="stylesheet" href="./css/style.css">
 </head>
-
+ 
 <body>
-
-  <h1>Carrinho de Compras</h1>
-
-  <form id="formProduto">
-    <div>
-      <label>Nome:</label>
-      <input type="text" id="nomeProduto" placeholder="Ex: Arroz">
-      <span id="erroNome" class="error hide"></span>
+  <div class="app-wrapper">
+ 
+    <div class="app-header">
+      <h1>Carrinho de Compras</h1>
     </div>
-    <div>
-      <label>Preço (MZN):</label>
-      <input type="number" id="precoProduto" step="0.01" min="0" placeholder="Ex: 150.00">
-      <span id="erroPreco" class="error hide"></span>
+ 
+    <div class="app-grid">
+ 
+      <!-- COLUNA ESQUERDA: formulário -->
+      <div class="col-esquerda">
+        <form id="formProduto">
+          <h2>Novo Produto</h2>
+          <div>
+            <label>Nome</label>
+            <input type="text" id="nomeProduto" placeholder="Ex: Arroz">
+            <span id="erroNome" class="error hide"></span>
+          </div>
+          <div>
+            <label>Preço (MZN)</label>
+            <input type="number" id="precoProduto" step="0.01" min="0" placeholder="Ex: 150.00">
+            <span id="erroPreco" class="error hide"></span>
+          </div>
+          <div>
+            <label>Quantidade</label>
+            <input type="number" id="quantidadeProduto" min="1" value="1">
+            <span id="erroQuantidade" class="error hide"></span>
+          </div>
+          <button type="submit">Adicionar Produto</button>
+        </form>
+      </div>
+ 
+      <!-- COLUNA DIREITA: produtos e carrinho -->
+      <div class="col-direita">
+ 
+        <div class="painel">
+          <h2>Produtos Disponíveis</h2>
+          <div id="listaProdutos">
+            <p class="empty-message">Nenhum produto cadastrado ainda.</p>
+          </div>
+        </div>
+ 
+        <div class="painel">
+          <h2>Itens no Carrinho</h2>
+          <div id="itensCarrinho">
+            <p class="empty-message">O carrinho está vazio.</p>
+          </div>
+          <div id="resumoCarrinho" class="hide">
+            <p><strong>Total de itens:</strong> <span id="totalItens">0</span></p>
+            <p><strong>Valor Total:</strong> <span id="valorTotal">0.00</span> MZN</p>
+            <button id="btnEncerrar">Encerrar compra</button>
+          </div>
+        </div>
+ 
+      </div>
     </div>
-    <div>
-      <label>Quantidade:</label>
-      <input type="number" id="quantidadeProduto" min="1" value="1">
-      <span id="erroQuantidade" class="error hide"></span>
-    </div>
-    <button type="submit">Adicionar Produto</button>
-  </form>
-
-  <hr>
-
-  <h2>Produtos Disponíveis</h2>
-  <div id="listaProdutos">
-    <p class="empty-message">Nenhum produto cadastrado ainda.</p>
   </div>
-  <hr>
-  <h2>Itens no Carrinho</h2>
-  <div id="itensCarrinho">
-    <p class="empty-message">O carrinho está vazio.</p>
-  </div>
-  <hr>
-  <div id="resumoCarrinho" class="hide">
-    <p><strong>Total de itens:</strong> <span id="totalItens">0</span></p>
-    <p><strong>Valor Total:</strong> <span id="valorTotal">0.00</span> MZN</p>
-    <button id="btnEncerrar" style="background-color: #d9534f; color: white; margin-top: 15px;">
-      Encerrar compra
-    </button>
-  </div>
-
+ 
   <script type="module" src="./js/controller.js"></script>
 </body>
-
+ 
 </html>
