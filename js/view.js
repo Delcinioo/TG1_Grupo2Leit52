@@ -36,7 +36,7 @@ export class LojaView {
         <span class="preco-produto">${produto.preco.toFixed(2)} MZN</span>
         <span class="quantidade-badge">x${produto.quantidade}</span>
         <div style="display:flex; gap:5px;">
-          <input type="number" id="qtd-${index}" value="1" min="1" max="${produto.quantidade}" style="width:45px" ${esgotado ? 'disabled' : ''}>
+          <input type="number" id="qtd-${index}" value="1" min="1" max="${produto.quantidade}" style="width:70px" ${esgotado ? 'disabled' : ''}>
           <button class="btn-carrinho" data-nome="${produto.nome}" data-index="${index}" ${esgotado ? 'disabled style="background:#ccc"' : ''}>Comprar</button>
         </div>
       `;
